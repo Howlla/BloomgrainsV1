@@ -9,7 +9,7 @@ export const AddonModel = types.model('AddonModel',{
     inCart: false,
 }).views(self=>({
     get price(){
-        return self.unityPrice*percentage
+        return (self.unityPrice*self.percentage).toFixed(2)
     }
 })).actions(self => ({
     incPercentage(){
@@ -18,7 +18,7 @@ export const AddonModel = types.model('AddonModel',{
     },
     decPercentage(){
         self.percentage -= 1;
-        if(percentage==0){
+        if(self.percentage==0){
             self.inCart=false;
         }
     }

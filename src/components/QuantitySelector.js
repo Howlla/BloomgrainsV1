@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import { Box,Text } from 'react-native-design-utility';
 import { Image,StyleSheet } from 'react-native';
+import {inject,observer} from 'mobx-react/native'
 
+
+@inject('shoppingCartStore')
+@observer
 export default class QuantitySelector extends Component {
   render() {
       console.log(this.props,"props")
@@ -23,6 +27,8 @@ export default class QuantitySelector extends Component {
             </Box>
             <Box>
                 <Text>{product.name} </Text>
+                <Text>{this.props.shoppingCartStore.getWheat}</Text>
+                <Text>{this.props.shoppingCartStore.getTotalPrice}</Text>
             </Box>
       </Box>
     )

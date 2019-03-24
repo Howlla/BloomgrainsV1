@@ -12,9 +12,16 @@ export const ShoppingCartStore = types.model('ShoppingCartStore',{
     qty:types.optional(types.enumeration("qty",["1","2","5","10"]),'1')
 }).views(self => ({ 
     get getWheat() { // B
-        totalAddons = 0
-        totalAddons = self.addons.reduce((sum,el) => (sum+el.percentage),0)
-      return 100-totalAddons
+        const total=self.addons.reduce((sum,el) => (sum+el.percentage),0);
+        if(total<100)
+            return 100 -  total;
+        else return 100
+    },
+    get getTotalPrice(){
+       const basePrice = (self.product.kgPrice*self.qty)*self.getWheat/100;
+       console.log(self.addons,"addons")
+       const addonPrice = self.addons.forEach(AddonModel=>(AddonModel.price))
+       return basePrice
     }
   }))
     .actions(self => ({

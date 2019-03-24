@@ -28,13 +28,17 @@ componentDidMount(){
      title:'Customize Your Wheat'
  }
  keyExtractor = item => String(item.id);
+
  renderOptions = ({item,index}) => {
+
 return(
-    <AddonCard  {...item}/>
+    <AddonCard  addon={item}/>
 )
 };
     render() {
+
     const {product,addons}=this.props.shoppingCartStore
+    
     console.log("Product",product.name)
       state={active:true}
     return (
