@@ -4,7 +4,7 @@ import { Box, Text } from 'react-native-design-utility';
 import OnboardingLogo from '../commons/OnboardingLogo';
 import {inject} from 'mobx-react/native'
 
-@inject('currentUser')
+@inject('authStore')
 class SplashScreen extends Component {
   state = {};
 
@@ -14,7 +14,7 @@ class SplashScreen extends Component {
  
   checkAuth = async () => {
     // try{
-      this.props.currentUser.setupAuth();
+      this.props.authStore.setupAuth();
 //       // await AsyncStorage.setItem('JWT', 'I like to save it.');
 // await AsyncStorage.removeItem('JWT')
 //   await AsyncStorage.getItem('JWT')

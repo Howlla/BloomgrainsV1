@@ -10,7 +10,7 @@ import { images, tabBarIcons } from './src/constants/images';
 import { cacheImages } from './src/utils/cacheImages';
 import { theme } from './src/constants/theme';
 
-import {store} from './src/models'
+import {store} from './src/stores'
 
 export default class App extends React.Component {
   state = {
@@ -27,7 +27,8 @@ export default class App extends React.Component {
       ...Object.values(tabBarIcons.active),
       ...Object.values(tabBarIcons.inactive),
     ]);
-    await Promise.all([...imagesAssets]).then(()=>this.setState({isReady:true}));
+    await Promise.all([...imagesAssets])
+    this.setState({ isReady: true });
 
   };
 

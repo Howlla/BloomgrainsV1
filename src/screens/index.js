@@ -51,13 +51,12 @@ import {
     },
   );
   
-  
   const TabNavigator = createBottomTabNavigator({
     Home: HomeStack,
     Orders: {
         getScreen: () => require('./OrdersScreen').default,
       },
-    Contact: {
+    Profile: {
         getScreen: () => require('./ContactScreen').default,
       },
   },{
@@ -91,7 +90,7 @@ import {
       Main: MainNavigator,
     },
     {
-      initialRouteName: 'Main',
+      initialRouteName: 'Splash',
     },
 );
 

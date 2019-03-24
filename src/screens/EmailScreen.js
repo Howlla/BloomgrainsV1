@@ -11,7 +11,7 @@ data={
         "password":"12345678"
     }
 }
-@inject('currentUser')
+@inject('authStore')
 class EmailScreen extends Component {
     state = {
         email: '',
@@ -22,33 +22,14 @@ class EmailScreen extends Component {
     componentDidMount(){
      this.setState({buttonText:this.props.navigation.getParam('buttonText','Login')})
     }
-    signupUser = async (email, password) => {
+    loginUser = async (email, password) => {
         try {
-            await this.props.currentUser.login(email,password)
-            // if (this.state.password.length < 6) {
-            //     alert("Password should have atleast 6 characters")
-            //     return
-            // }
-            //  fetch('http://10.0.1.23:3000/user_token.json', {
-            //     method: "POST", // *GET, POST, PUT, DELETE, etc.
-            //     mode: "cors", // no-cors, cors, *same-origin
-            //     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-            //     credentials: "same-origin", // include, *same-origin, omit
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //         // "Content-Type": "application/x-www-form-urlencoded",
-            //     },
-            //     redirect: "follow", // manual, *follow, error
-            //     referrer: "no-referrer", // no-referrer, *client
-            //     body: JSON.stringify(data), // body data type must match "Content-Type" header
-            // })
-            // .then(response => response.json())
-            // .then(x=>{console.log(x)}); // parses response to JSON
-            if(x.isVerified!=true){
-                this.props.navigation.navigate('MobileAuth',{phone:this.state.email});
+            if (this.state.password.length < 8) {
+                alert("Password should have atleast 8 characters")
+                return
             }
-            this.props.navigation.navigate('MobileAuth',{phone:this.state.email});
-
+            await this.props.authStore.login(email,password)
+    
         }
         catch (error) {
             console.log(error.toString())
@@ -56,7 +37,7 @@ class EmailScreen extends Component {
 
     }
 
-    loginUser = (email, password) => {
+    signupUser = (email, password) => {
         // try {
         //     firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
         //         console.log(user);
@@ -84,7 +65,7 @@ class EmailScreen extends Component {
                             autoCorrect={false}
                             keyboardType="phone-pad"
                             autoCapitalize="none"
-                            textContentType="number"
+                            textContentType="telephoneNumber"
                             onChangeText={(email) => this.setState({ email })}
                         />
                     </Item>
@@ -116,7 +97,7 @@ class EmailScreen extends Component {
                         block
                         rounded
                         // success
-                        onPress={() => { this.signupUser(this.state.email, this.state.password) }}>
+                        onPress={() => { this.loginUser(this.state.email, this.state.password) }}>
 
                         <Text color="white">{this.state.buttonText}</Text>
                     </Button>

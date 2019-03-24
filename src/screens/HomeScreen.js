@@ -6,63 +6,23 @@ import {theme} from '../constants//theme'
 import ProductCard from '../components/ProductCard';
 import DealCarousel from '../components/DealCarousel';
 
-const Categories = [
-  {
-    id:1,
-    title:'MP Sharbati Platinum',
-    price:'50',
-    photo:'WheatPlatinum.jpg'
-    // image:require()
-  },
-  {
-    id:2,
-    title:'MP Sharbati Diamond',
-    price:'44',
-    photo:'WheatDiamond.jpg'
-  },
-  {
-    id:3,
-    title:'MP Sharbati Gold',
-    price:'37',
-    photo:'WheatGold.jpg'
-  },
-  {
-    id:4,
-    title:'Other Grains',
-    price:'-',
-    photo:'OtherGrains.jpg'
-  },
-]
-// const others=[{
-//     id:5,
-//     title:'Soyabean',
-//     price:'50'
-//     // image:require()
-//   },
-//   {
-//     id:6,
-//     title:'Chickpea',
-//     price:'44',
-//   },
-//   {
-//     id:7,
-//     title:'Sorghum',
-//     price:'37'
-//   },
-//   {
-//     id:8,
-//     title:'Millets',
-//     price:'44'
-//   },
+import {inject,observer} from 'mobx-react/native'
 
-// ]
 
+@inject('productsStore')
+@observer
 class HomeScreen extends Component {
-  state={
-    Categories:[]
-  }
+  // state={
+  //   Products:[]
+  // }
+
   componentDidMount(){
-    this.setState({Categories})
+    // const {data} = this.props.productsStore;
+    // const Products=data.map((product)=>{
+    //   return product
+    // })
+    // this.setState({Products})
+    // console.log(Products);
   }
   static navigationOptions = {
     title:"Home"
@@ -73,12 +33,7 @@ class HomeScreen extends Component {
       style.borderLeftWidth=2;
       style.borderLeftColor=theme.color.greyLighter;
     }
-    // if(item.id==4){
-    //   item.onPress=()=>{
-    //     this.setState({Categories:this.state.Categories.slice(0,3).concat(others)})
-    //     console.log(this.state.Categories)
-    //   }
-    // }
+
 
   return(
     <Box w={1/2} bg="white" h={200} style={style}>
@@ -99,7 +54,7 @@ class HomeScreen extends Component {
 
           <Box f={1} p={10}>
             <FlatList
-              data={this.state.Categories}
+              data={this.props.productsStore.data.map((product)=>product)}
               renderItem={this.renderOptions}
               keyExtractor={this.keyExtractor}
               numColumns={2}
