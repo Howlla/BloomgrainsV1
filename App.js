@@ -5,6 +5,8 @@ import { UtilityThemeProvider, Box } from 'react-native-design-utility';
  
 import { Provider } from 'mobx-react/native'
 
+import {Root} from 'native-base'
+
 import Navigation from './src/screens';
 import { images, tabBarIcons } from './src/constants/images';
 import { cacheImages } from './src/utils/cacheImages';
@@ -42,9 +44,11 @@ export default class App extends React.Component {
     }
     return (
       <Provider {...store}>
+        <Root>
         <UtilityThemeProvider theme={theme}>
           <Navigation />
         </UtilityThemeProvider>
+        </Root>
      </Provider>
     );
   }

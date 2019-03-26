@@ -9,7 +9,7 @@ import DealCarousel from '../components/DealCarousel';
 import {inject,observer} from 'mobx-react/native'
 
 
-@inject('productsStore')
+@inject('productsStore',"shoppingCartStore")
 @observer
 class HomeScreen extends Component {
   // state={
@@ -17,6 +17,8 @@ class HomeScreen extends Component {
   // }
 
   componentDidMount(){
+  //  this.props.shoppingCartStore.resetAddons();
+    // this.props.shoppingCartStore.clearAddons([]);
     // const {data} = this.props.productsStore;
     // const Products=data.map((product)=>{
     //   return product

@@ -56,8 +56,8 @@ import {
     Orders: {
         getScreen: () => require('./OrdersScreen').default,
       },
-    Profile: {
-        getScreen: () => require('./ContactScreen').default,
+    Addresses: {
+        getScreen: () => require('./AddressScreen').default,
       },
   },{
       tabBarComponent: props => <TabBar {...props} />
@@ -74,7 +74,7 @@ import {
         
         // },
         // // headerTintColor: 'orange',
-        //     headerTitleStyle: {
+        //     headerTitleStyle: {s
         //       fontWeight: 'bold',
         //     },
     }

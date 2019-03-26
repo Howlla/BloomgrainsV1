@@ -6,6 +6,7 @@ import {theme} from '../constants/theme'
 import {inject,observer} from 'mobx-react'
 import { ShoppingCartStore } from '../stores/ShoppingCart';
 
+@inject('shoppingCartStore')
 @observer
 class AddonCard extends Component {
   state={
@@ -20,7 +21,7 @@ class AddonCard extends Component {
     // this.setState(s=>({
     //   percentage:s.percentage+1
     // }))
-    console.log(this.props)
+    // console.log(this.props)
     this.props.addon.incPercentage();
     // this.props.addon[this.props.id-1].incPercentage()
   }
@@ -42,7 +43,8 @@ class AddonCard extends Component {
     return (
       <Box center
             dir="row"
-            rows={[1]}>
+            rows={[1]}
+            m="0">
         <Box >
         <Card>
             <CardItem header>
@@ -51,10 +53,10 @@ class AddonCard extends Component {
          */}
               <Text  right size="xm">{addon.name}@</Text>
                 <Text center bold size="sm">₹{addon.kgPrice}/kg  </Text>
-                <Text right size="xs" bold >₹ {this.props.addon.price}</Text>
+                {/* <Text right size="xs" bold >₹ {this.props.addon.price}</Text> */}
         
               
-                  <Box dir="row" justify="between" p={5}align="center"  bg="white" style={{position:'absolute',top:8,left:250}} >
+                  <Box dir="row" justify="between" align="center"  bg="white" style={{position:'absolute',top:8,left:250}} >
                   {/* <Text>{this.props.addon.price}</Text> */}
                    <TouchableOpacity onPress={this.handleDecrement}>
                      <Icon name="remove-circle" />

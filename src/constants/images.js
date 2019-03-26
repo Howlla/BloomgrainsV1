@@ -12,12 +12,12 @@ export const images = {
       active:{
           Home:require('../../assets/img/HomeIconActive.png'),
           Orders:require('../../assets/img/OrderIconActive.png'),
-          Profile:require('../../assets/img/StoresIconActive.png')
+          Addresses:require('../../assets/img/StoresIconActive.png')
       },
       inactive:{
         Home:require('../../assets/img/HomeIconInactive.png'),
         Orders:require('../../assets/img/OrderIconInactive.png'),
-        Profile:require('../../assets/img/StoresIconInactive.png')
+        Addresses:require('../../assets/img/StoresIconInactive.png')
     },
 
   };

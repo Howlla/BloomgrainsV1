@@ -9,20 +9,25 @@ import QuantitySelector from '../components/QuantitySelector'
 
 import{inject,observer} from 'mobx-react/native'
 
-import {Button} from 'native-base';
+import {Button,Right, Icon} from 'native-base';
 
  @inject('addonsStore','shoppingCartStore')
+ @observer
 class AddonScreen extends Component {
-  state={
-    addons:[]
-  }
+
+  state = { addons:false }
+   
 componentDidMount(){
+  
   const {data} = this.props.addonsStore
+  // console.log(data,"addonStore")
   this.props.shoppingCartStore.setAddons(data.slice())
+  //SETS VALUE OF PERC TO 0
+  this.props.shoppingCartStore.resetAddons();
   // console.log(data.slice())
   // console.log("hey",this.props.shoppingCartStore.product)
   // this.setState({addons:data.slice()})
-  console.log(data)
+  // console.log(data)
 }
   static navigationOptions = {
      title:'Customize Your Wheat'
@@ -43,10 +48,10 @@ return(
       state={active:true}
     return (
       <Box f={1}>
-        <Box f={0.3}bg="red" >
+        <Box f={0.2}bg="red" >
           <QuantitySelector product={product}/>
         </Box>
-        <Box f={0.7} >
+        {this.state.addons && <Box f={0.7} >
         <FlatList
               data={addons}
               renderItem={this.renderOptions}
@@ -54,10 +59,22 @@ return(
               numColumns={1}
               />
           {/* <AddonCard name={this.props.addonsStore.data.slice()[0].name} kgPrice={this.props.addonsStore.data.slice()[0].kgPrice}/> */}
+        </Box>}
+       {!this.state.addons && 
+          <Box f={0.20}>
+        <Box center f={0.5}>
+          <Text size="md" bold>Customize your grain?</Text>
         </Box>
-        <Box f={0.1}>
-        <Button full success>
-            <Text>Checkout</Text>
+        <Box f={1} p="xs">
+        <Button full success onPress ={()=>{this.setState({addons:true})}}>
+          <Text bold>Yes</Text>
+         </Button>
+        </Box>
+        </Box>
+        }
+        <Box f={0.1}p="xs">
+        <Button full warning iconRight>
+            <Text bold>Checkout</Text>
           </Button>
         </Box>
       </Box>

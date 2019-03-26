@@ -1,4 +1,4 @@
-import { types } from 'mobx-state-tree'
+import { types, getSnapshot,applySnapshot } from 'mobx-state-tree'
 import { AddonModel } from '../models/Addon';
 import { ProductModel } from '../models/Product';
 // import {AddonModel} from '../models/Addon'
@@ -19,12 +19,17 @@ export const ShoppingCartStore = types.model('ShoppingCartStore',{
     },
     get getTotalPrice(){
        const basePrice = (self.product.kgPrice*self.qty)*self.getWheat/100;
-       console.log(self.addons,"addons")
-       const addonPrice = self.addons.forEach(AddonModel=>(AddonModel.price))
-       return basePrice
+    //    console.log(self.addons,"addons")
+       const addonPrice = self.addons.reduce((sum,addon)=>(sum+Number(addon.price)),0)*self.qty
+       return (basePrice+addonPrice).toFixed(2)
     }
   }))
     .actions(self => ({
+        resetAddons(){
+            self.addons.forEach(addon=>{
+                addon.percentage=0;
+            })
+        },
         setProduct(product){
         self.product=product
         self.product.isSelected=true
@@ -34,5 +39,12 @@ export const ShoppingCartStore = types.model('ShoppingCartStore',{
     },
     setAddons(addons){
         self.addons=addons
-    }
+    },
+    afterCreate () {
+        // const initialState={}
+        initialState = getSnapshot(self);
+      },
+      reset() {
+        applySnapshot(self, initialState);
+      },
 }))
