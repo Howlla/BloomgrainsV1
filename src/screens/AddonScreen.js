@@ -10,8 +10,9 @@ import QuantitySelector from '../components/QuantitySelector'
 import{inject,observer} from 'mobx-react/native'
 
 import {Button,Right, Icon} from 'native-base';
+import { NavigationService } from '../API/NavigationService';
 
- @inject('addonsStore','shoppingCartStore')
+ @inject('authStore','addonsStore','shoppingCartStore')
  @observer
 class AddonScreen extends Component {
 
@@ -29,17 +30,25 @@ componentDidMount(){
   // this.setState({addons:data.slice()})
   // console.log(data)
 }
-  static navigationOptions = {
+  static navigationOptions = ()=> ({
      title:'Customize Your Wheat'
- }
+ })
  keyExtractor = item => String(item.id);
 
  renderOptions = ({item,index}) => {
-
 return(
     <AddonCard  addon={item}/>
 )
 };
+onCheckout = () =>{
+  if(this.props.authStore.info.addresses.length==0){
+    NavigationService.navigate('Addresses')
+  }
+  else{
+    NavigationService.navigate('checkout')
+
+  }
+}
     render() {
 
     const {product,addons}=this.props.shoppingCartStore
@@ -73,7 +82,7 @@ return(
         </Box>
         }
         <Box f={0.1}p="xs">
-        <Button full warning iconRight>
+        <Button full warning iconRight onPress={this.onCheckout}>
             <Text bold>Checkout</Text>
           </Button>
         </Box>

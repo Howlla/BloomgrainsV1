@@ -1,35 +1,25 @@
 import React, { Component } from 'react';
 import { Box,Text } from 'react-native-design-utility';
 import PhoneAuth from '../components/MobileVerifier';
-// import * as firebase from 'firebase';
 // import axios from 'axios';
 
-// import { Container, Card, CardItem, Form, Item, Input, Button, Text, View, Body } from 'native-base';
+import {inject,observer} from 'mobx-react'
+import { Container, Card, CardItem, Form, Item, Input, Button, View, Body } from 'native-base';
+@inject('authStore')
+@observer
 class MobileAuthScreen extends Component {
     
  state={
      phone:'',
      code:'',
  };
-    signInWithPhone(phone){
-        this.setState({phone});
-       return fetch("https://api.authy.com/protected/json/phones/verification/start", {
-  body: `via=sms&phone_number=${this.state.phone}&country_code=91&code_length=6&locale=en`,
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded",
-    "X-Authy-Api-Key": "HfJbI48l3s0prXGuBo7dz3vimnuZ96CH"
-  },
-  method: "POST"
-})
+    signInWithPhone=async ()=>{
+       await this.props.authStore.startTwoFactor()
       }
      
-      redeemCode(code){
-    //    return fetch(`https://api.authy.com/protected/json/phones/verification/check?phone_number=${this.state.phone}&country_code=91&verification_code=${code}`, {
-    //         headers: {
-    //           "X-Authy-Api-Key": "HfJbI48l3s0prXGuBo7dz3vimnuZ96CH"
-    //         }
-    //       })
-          this.state.props.navigation.navigate('Main')
+      redeemCode=async (code) =>{
+       await this.props.authStore.checkTwoFactor(code)
+        //   this.state.props.navigation.navigate('Main')
           
       }
       componentDidMount(){
@@ -54,13 +44,13 @@ class MobileAuthScreen extends Component {
                 >
                     <CardItem style={{ backgroundColor: "none" }}>
                         <Item>
-                            <Input placeholder="Enter Number" />
+                            <Input placeholder={this.props.authStore.info.email} disabled />
                         </Item>
                     </CardItem>
 
                     <CardItem style={{ backgroundColor: "none" }}>
                         <Button primary style={{ textAlign: "center" }}>
-                            <Text>Submit</Text>
+                            <Text>SMS Verify</Text>
                         </Button>
                     </CardItem>
                 </View> */}
@@ -68,12 +58,13 @@ class MobileAuthScreen extends Component {
                     <Text size='2xl' color="orange"> SMS verification</Text>
                 </Box>
                 <PhoneAuth
-                signInWithPhone={phone => this.signInWithPhone(phone)}
+                signInWithPhone={()=>this.signInWithPhone()}
                 redeemCode={code => this.redeemCode(code)}
-                number={this.props.navigation.getParam('phone', '')}
+                number={this.props.authStore.info.email}
                 codeLength={6}
                 buttonTextColor='black'
                 spinnerColor='black'
+                // keyboardType={'none'}
                 color='orange'
                 androidFont='monospace'
                 iOSFont='Menlo'

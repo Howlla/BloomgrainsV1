@@ -45,11 +45,37 @@ import {
       Addon: {
         getScreen: () => require('./AddonScreen').default,
       },
+      Checkout:{
+        getScreen: () => require('./CheckoutScreen').default
+      }
     },
     {
       navigationOptions: { ...primaryHeader },
     },
   );
+
+
+const AddressFormStack = createStackNavigator(
+  {
+    AddressForm: {
+      getScreen: () => require('./AddressFormScreen').default,
+    },
+  },
+  { 
+    //  mode: 'modal',
+    //  headerMode: 'none',
+    navigationOptions: {
+      headerBackTitle: null,
+      headerTintColor: theme.color.green,
+      headerStyle: {
+        backgroundColor: theme.color.white,
+      },
+      headerTitleStyle: {
+        color: theme.color.black,
+      },
+    },
+  },
+);
   
   const TabNavigator = createBottomTabNavigator({
     Home: HomeStack,
@@ -63,10 +89,14 @@ import {
       tabBarComponent: props => <TabBar {...props} />
   });
   
+  
   const MainNavigator = createStackNavigator({
     Tab: TabNavigator,
-  },{
+    AddressForm: AddressFormStack,
+  },{  mode: 'modal',
+  header:null,
     navigationOptions:{
+      mode: 'modal',
       header:null
         // title:"BloomGrains",
         // headerStyle:{

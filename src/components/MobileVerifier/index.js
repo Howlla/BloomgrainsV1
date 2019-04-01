@@ -221,8 +221,11 @@ class PhoneVerifyScreen extends React.Component{
         </View>
         <TextInput
           ref={ref => this._ref = ref}
-          keyboardType={'phone-pad'}
-          style={{position: 'absolute', top: -100, left: -100}}
+          // keyboardType={'phone-pad'}
+          editable={false}
+          onFocus={Keyboard.dismiss()}
+
+          style={{position: 'absolute', top: -1000, left: -100}}
           value={this.state.number}
           onChangeText={num => {
             if(num.length < 11){
@@ -299,7 +302,7 @@ PhoneVerifyScreen.propTypes = {
   enterCodeMessage: PropTypes.string,
   disclaimerMessage: PropTypes.string,
   codeLength: PropTypes.number,
-  number: PropTypes.number,
+  number: PropTypes.string,
 
   cca2: PropTypes.string,
   callingCode: PropTypes.string

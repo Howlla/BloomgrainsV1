@@ -1,7 +1,7 @@
 import {AsyncStorage} from 'react-native';
 import {types,flow} from 'mobx-state-tree';
 
-import {loginApi, baseApi} from '../API/Api'
+import {loginApi, baseApi,usersApi} from '../API/Api'
 import {NavigationService} from '../API/NavigationService'
 import {CurrentUserModel} from '../models/CurrentUser'
 
@@ -16,6 +16,7 @@ export const AuthStore = types.model('AuthStore', {
     }),
     getAuthToken: flow(function*(){
         try{
+            // AsyncStorage.removeItem('token')
             const token = yield AsyncStorage.getItem('token');
             console.log("Token present in async",token)
             if(token){
@@ -35,6 +36,25 @@ export const AuthStore = types.model('AuthStore', {
             console.log(err)
         }
     }),
+    signup:flow(function*(number,password){
+        try{
+            const res= yield usersApi.post({
+                "user":{
+                    // need to create seperate screen to update name later 
+                    "name" : "JohnDoe",
+                    "email":number,
+                    "password":password,
+		            "password_confirmation":password,
+                }
+            }).json(json => json)
+
+            if(res.status==200){
+                yield self.login(number,password);
+            }
+        }catch(err){
+            console.log(err)
+        }
+    }),
     login: flow(function*(number,password){
         try{
             const res = yield loginApi.post({
@@ -44,7 +64,7 @@ export const AuthStore = types.model('AuthStore', {
                 }
                 // send object to backend for login
             }).json(json => json)
-            console.log("res",res)
+            // console.log("res",res)
             //SAVE TOKEN IF FOUND IN RESPONSE
             if (res.jwt){
                 self.authToken = res.jwt;
@@ -59,15 +79,46 @@ export const AuthStore = types.model('AuthStore', {
         try{
             if(self.authToken){
                 //if token then use wretch to get info
-                const res = yield baseApi.url('/users/me').headers({Authorization:`JWT ${self.authToken}`}).get()
+                const res = yield usersApi.url('/me').headers({Authorization:`JWT ${self.authToken}`}).get()
                 .json();
                 console.log("UserInfo",res);
                 self.info = res;
-                //check for isVerified
-                // NavigationService.navigate('MobileAuth')
-                NavigationService.navigate('Main')
+                console.log(self.info.is_verified,"here")
+                if(self.info.is_verified!=false){
+                    NavigationService.navigate('Main')
+
+                }
+
+     
+                // NavigationService.navigate('Main')
+                else
+                NavigationService.navigate('MobileAuth')
             }
         }catch(err){
+            console.log(err)
+        }
+    }),
+    startTwoFactor: flow(function*(){
+        try{
+            const res = yield usersApi.url('/start_verification').auth(`JWT ${self.authToken}`).get().json()
+            if(res.success!==true){
+                console.log("Failed mobile authentication navigate to splash")
+                NavigationService.navigate('Splash')
+            }
+        }
+        catch(err){
+            console.log(err)
+        }
+    }),
+    checkTwoFactor : flow(function*(code){
+        try{
+            const res= yield usersApi.url('/check_verification').auth(`JWT ${self.authToken}`).query({verification_code:code}).get().json();
+             if(res.success==true){
+                self.info.verifyNumber();
+                NavigationService.navigate('Main')
+            }
+        }
+        catch(err){
             console.log(err)
         }
     })

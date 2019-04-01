@@ -34,7 +34,7 @@ export default class QuantitySelector extends Component {
             <Box f={1} pl="xs">
                 <Text bold>{product.name} Aata</Text>
                 <Text color="greyDark" size="xs">At ₹{product.kgPrice}/Kg</Text>
-                <Text>{this.props.shoppingCartStore.getWheat}%</Text>
+                <Text>{this.props.shoppingCartStore.getWheat}% Wheat</Text>
             </Box>
             <Box center mr="md">
             <Text bold>QTY:</Text>
@@ -48,8 +48,10 @@ export default class QuantitySelector extends Component {
                     title: "Select Quantity of Wheat"
                   },
                   buttonIndex => {
-                    this.props.shoppingCartStore.setQty(BUTTONS[buttonIndex].substr(0,BUTTONS[buttonIndex].indexOf(' ')))
-                    // this.setState({ clicked: BUTTONS[buttonIndex] });
+                    // console.log(buttonIndex,"BUTTONINDEX")
+                    if(buttonIndex!==CANCEL_INDEX){
+                      this.props.shoppingCartStore.setQty(BUTTONS[buttonIndex].substr(0,BUTTONS[buttonIndex].indexOf(' ')))                    
+                    }
                   }
                 )}
               

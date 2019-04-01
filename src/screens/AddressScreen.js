@@ -13,6 +13,9 @@ class AddressScreen extends Component {
   static navigationOptions = {
     title:"Home"
   }
+  handleAddAddressPress = () => {
+    this.props.navigation.navigate('AddressForm');
+  };
   state = {};
   render() {
     return (
@@ -23,12 +26,12 @@ class AddressScreen extends Component {
           <EvilIcons name="location" color={theme.color.black} size={200}/>
         </Box>
         <Box center>
-          <Text bold size="2lg">Hey</Text>
+          <Text bold size="2lg">Hey {this.props.authStore.info.name},</Text>
           <Text bold size="lg"> Add your address</Text>
           <Text size="sm" color="greyLight">You haven't added an address yet </Text>
         </Box>
         <Box width="100%" p="md">
-        <Button full success onPress ={()=>{}}>
+        <Button full success onPress={this.handleAddAddressPress}>
           <Text bold color="white">Add address</Text>
          </Button>
         </Box>

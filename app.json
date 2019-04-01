@@ -7,8 +7,8 @@
   "5": "e",
   "6": "d",
   "expo": {
-    "name": "Blank Template",
-    "slug": "expo-template-blank",
+    "name": "BloomGrains",
+    "slug": "expo-bloom-grain",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -31,6 +31,9 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.Bloomgrains.app"
     }
   }
 }
