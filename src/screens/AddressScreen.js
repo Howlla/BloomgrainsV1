@@ -7,19 +7,22 @@ import {EvilIcons} from '@expo/vector-icons'
 
 import { theme } from '../constants/theme';
 import{inject} from 'mobx-react';
+import { observer } from 'mobx-react/native';
 
 @inject('authStore')
+@observer
 class AddressScreen extends Component {
-  static navigationOptions = {
-    title:"Home"
-  }
+  static navigationOptions = ()=> ({
+    title:'Your Addresses'
+})
   handleAddAddressPress = () => {
     this.props.navigation.navigate('AddressForm');
   };
-  state = {};
-  render() {
-    return (
-      <Box f={1} center px="md">
+  componentDidMount(){
+    // this.props.authStore.info.getUserAddresses();
+  }
+  renderIfEmpty =()=> (
+  <Box f={1} center px="md">
         <StatusBar barStyle="dark-content"/>
 
         <Box center mb="md">
@@ -35,6 +38,15 @@ class AddressScreen extends Component {
           <Text bold color="white">Add address</Text>
          </Button>
         </Box>
+      </Box>
+  );
+  render() {
+    if(this.props.authStore.info.addressesIsEmpty){
+      return this.renderIfEmpty()
+    }
+    return (
+      <Box f={1} center px="md">
+        <Text>Hey</Text>
       </Box>
     );
   }

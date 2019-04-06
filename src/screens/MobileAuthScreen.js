@@ -9,10 +9,6 @@ import { Container, Card, CardItem, Form, Item, Input, Button, View, Body } from
 @observer
 class MobileAuthScreen extends Component {
     
- state={
-     phone:'',
-     code:'',
- };
     signInWithPhone=async ()=>{
        await this.props.authStore.startTwoFactor()
       }
@@ -56,12 +52,13 @@ class MobileAuthScreen extends Component {
                 </View> */}
                 <Box f={0.1} center mt={20} >
                     <Text size='2xl' color="orange"> SMS verification</Text>
+                    <Text size='xl' color = "white">+91 {this.props.authStore.info.email}</Text>
                 </Box>
                 <PhoneAuth
                 signInWithPhone={()=>this.signInWithPhone()}
                 redeemCode={code => this.redeemCode(code)}
                 number={this.props.authStore.info.email}
-                codeLength={6}
+                codeLength={4}
                 buttonTextColor='black'
                 spinnerColor='black'
                 // keyboardType={'none'}

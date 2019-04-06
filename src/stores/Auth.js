@@ -85,8 +85,8 @@ export const AuthStore = types.model('AuthStore', {
                 self.info = res;
                 console.log(self.info.is_verified,"here")
                 if(self.info.is_verified!=false){
+                    self.info.getUserAddresses();
                     NavigationService.navigate('Main')
-
                 }
 
      

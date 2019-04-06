@@ -12,10 +12,11 @@ import {
 import Button from './Button';
 import CountryPicker from 'react-native-country-picker-modal';
 import PropTypes from 'prop-types';
+import {observer} from 'mobx-react/native'
 
 const {width} = Dimensions.get('window');
 
-
+@observer
 class PhoneVerifyScreen extends React.Component{
 
   constructor(p){
@@ -30,7 +31,7 @@ class PhoneVerifyScreen extends React.Component{
       },
 
       verifying: true,
-      verifyOpacity: new Animated.Value(0),
+      // verifyOpacity: new Animated.Value(0),
       redeemOpacity: new Animated.Value(0),
 
       appState: '',
@@ -58,103 +59,31 @@ class PhoneVerifyScreen extends React.Component{
     };
   }
 
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange.bind(this));
-  }
-
-  _handleAppStateChange(nextAppState){
-    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-      if(this._ref) {
-        this._ref.focus();
-      }
-      if(this._ref2){
-        this._ref2.focus();
-      }
-    }
-    this.setState({appState: nextAppState});
-  }
-
   componentDidMount(){
-    AppState.addEventListener('change', this._handleAppStateChange.bind(this));
-    let bla = Keyboard.addListener('keyboardDidShow', (e) => {
-      this.setState({keyboardHeight: e.endCoordinates.height});
+    // AppState.addEventListener('change', this._handleAppStateChange.bind(this));
+    // let bla = Keyboard.addListener('keyboardDidShow', (e) => {
+    //   this.setState({keyboardHeight: e.endCoordinates.height});
+    // });
+    // this._ref.focus();
+    // Animated.timing(this.state.verifyOpacity, {toValue: 1}).start();
+    Animated.timing(this.state.redeemOpacity, {toValue: 1}).start();
+    // this.setState({number:this.props.number})
+    this.props.signInWithPhone().catch((err) => {
+      console.log(err)
     });
-    this._ref.focus();
-    Animated.timing(this.state.verifyOpacity, {toValue: 1}).start();
-    this.setState({number:this.props.number})
-  }
-
-  renderAreaCode(){
-    let arr = [];
-    let numbers = this.state.number.split('').slice(0, 3);
-    for(let i=0; i<3; i++){
-      if(isNaN(numbers[i])) numbers[i] = '_';
-    }
-    // we can use indexOf here because it returns the first index that it encounters '_'
-    let next = numbers.indexOf('_');
-
-    arr.push(React.createElement(
-      Text,
-      { key: Math.random(), style: this.styles.phoneAuthText },
-      "("
-    ));
-    numbers.map((num, index) => {
-      let color = 'orange';
-      if(index === next) color = this.props.color;
-      arr.push(React.createElement(
-        Text,
-        { key: index, style: [this.styles.phoneAuthText, { color }] },
-        num
-      ));
-    });
-    arr.push(React.createElement(
-      Text,
-      { key: Math.random(), style: this.styles.phoneAuthText },
-      ")"
-    ));
-    return arr;
-  }
-
-  renderNumber(){
-    let arr = [];
-    let numbers = this.state.number.split('').slice(0, 10);
-    for(let i=0; i<10; i++){
-      if(isNaN(numbers[i])) numbers[i] = '_';
-    }
-    let next = numbers.indexOf('_');
-    numbers.slice(3, 6).map((num, index) => {
-      let color = 'orange';
-      if(index+3 === next) color = this.props.color;
-      arr.push(React.createElement(
-        Text,
-        { key: index + 100, style: [this.styles.phoneAuthText, { color }] },
-        num
-      ));
-    });
-    arr.push(React.createElement(
-      Text,
-      { key: Math.random(), style: this.styles.phoneAuthText },
-      "-"
-    ));
-    numbers.slice(6, 10).map((num, index) => {
-      let color = 'orange';
-      if(index+6 === next) color = this.props.color;
-      arr.push(React.createElement(
-        Text,
-        { key: index, style: [this.styles.phoneAuthText, { color }] },
-        num
-      ));
-    });
-    return arr;
   }
 
   renderCode(){
     let arr = [];
     let numbers = this.state.code.split('');
+    console.log(numbers)
     for(let i=0; i<this.props.codeLength; i++){
-      if(isNaN(numbers[i])) numbers[i] = '_';
+      if(isNaN(numbers[i]))
+       numbers[i] = '_';
     }
+    console.log(numbers)
     let next = numbers.indexOf('_');
+    console.log
     numbers.map((num, index) => {
       let color = 'black';
       if(index === next) color = this.props.color;
@@ -191,63 +120,10 @@ class PhoneVerifyScreen extends React.Component{
 
   render(){
 
-    let verifying = (
-      <Animated.View style={{
-        marginTop: 100,
-        flex: 1,
-        marginBottom: this.state.keyboardHeight+20,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        opacity: this.state.verifyOpacity
-      }}>
-        <View style={{alignItems: 'center'}}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <CountryPicker
-              cca2={this.state.countryInfo.cca2}
-              onChange={e => {
-                this._ref.focus();
-                this.setState({countryInfo: e});
-              }}
-              onClose={() => this._ref.focus()}
-              filterable
-              closeable
-              showCallingCode
-            />
-            <Text style={this.styles.phoneAuthText}>+{this.state.countryInfo.callingCode}</Text>
-            {this.renderAreaCode()}
-          </View>
-          <View style={{flexDirection: 'row'}}>{this.renderNumber()}</View>
-        </View>
-        <TextInput
-          ref={ref => this._ref = ref}
-          // keyboardType={'phone-pad'}
-          editable={false}
-          onFocus={Keyboard.dismiss()}
-
-          style={{position: 'absolute', top: -1000, left: -100}}
-          value={this.state.number}
-          onChangeText={num => {
-            if(num.length < 11){
-              this.setState({number: num});
-            }
-          }}
-        />
-        <View style={{alignItems: 'center', width: '100%'}}>
-          <Button
-            title={this.props.verifyButtonMessage}
-            backgroundColor={this.props.color}
-            onPress={() => this.verify()}
-            loading={this.state.loading}
-            spinnerColor={this.props.spinnerColor}
-            textColor={this.props.buttonTextColor}
-          />
-          <Text style={this.styles.finePrint}>{this.props.disclaimerMessage}</Text>
-        </View>
-      </Animated.View>
-    );
-
-    let redeeming = (
+    return(
+      // <View style={this.props.containerStyle}>
+      //   {this.state.verifying ? verifying : redeeming}
+      // </View>
       <Animated.View style={{
         opacity: this.state.redeemOpacity,
         marginBottom: this.state.keyboardHeight+20,
@@ -261,11 +137,13 @@ class PhoneVerifyScreen extends React.Component{
           style={{position: 'absolute', top: -100, left: -100}}
           value={this.state.code}
           onChangeText={num => {
+            console.log(num);
             if(num.length < this.props.codeLength+1){
+              console.log(this.props.codeLength,"code length")
+              console.log(num,"num")
               this.setState({code: num});
             }
           }}
-          ref={ref => this._ref2 = ref}
         />
         <View/>
         <View style={{flexDirection: 'row'}}>{this.renderCode()}</View>
@@ -278,12 +156,6 @@ class PhoneVerifyScreen extends React.Component{
           spinnerColor={this.props.spinnerColor}
         />
       </Animated.View>
-    );
-
-    return(
-      <View style={this.props.containerStyle}>
-        {this.state.verifying ? verifying : redeeming}
-      </View>
     );
   }
 }
@@ -318,7 +190,7 @@ PhoneVerifyScreen.defaultProps = {
   iOSFont: 'Menlo',
   containerStyle: {flex: 1},
   verifyButtonMessage: 'Verify Phone Number*',
-  enterCodeMessage: 'Enter code',
+  enterCodeMessage: 'Enter OTP',
   disclaimerMessage: '*Message & data rates may apply.',
   codeLength: 4,
 
