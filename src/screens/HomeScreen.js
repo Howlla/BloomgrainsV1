@@ -12,20 +12,7 @@ import {inject,observer} from 'mobx-react/native'
 @inject('productsStore',"shoppingCartStore")
 @observer
 class HomeScreen extends Component {
-  // state={
-  //   Products:[]
-  // }
 
-  componentDidMount(){
-  //  this.props.shoppingCartStore.resetAddons();
-    // this.props.shoppingCartStore.clearAddons([]);
-    // const {data} = this.props.productsStore;
-    // const Products=data.map((product)=>{
-    //   return product
-    // })
-    // this.setState({Products})
-    // console.log(Products);
-  }
   static navigationOptions = {
     title:"Home"
   }

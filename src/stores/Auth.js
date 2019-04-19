@@ -112,10 +112,14 @@ export const AuthStore = types.model('AuthStore', {
     }),
     checkTwoFactor : flow(function*(code){
         try{
-            const res= yield usersApi.url('/check_verification').auth(`JWT ${self.authToken}`).query({verification_code:code}).get().json();
+            const res= yield usersApi.url(`/check_verification?verification_code=${code}`).auth(`JWT ${self.authToken}`).get().json();
+            console.log(res)
              if(res.success==true){
                 self.info.verifyNumber();
                 NavigationService.navigate('Main')
+            }
+            else{
+                alert('OTP Incorrect')
             }
         }
         catch(err){

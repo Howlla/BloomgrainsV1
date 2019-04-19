@@ -21,14 +21,9 @@ class AddonScreen extends Component {
 componentDidMount(){
   
   const {data} = this.props.addonsStore
-  // console.log(data,"addonStore")
   this.props.shoppingCartStore.setAddons(data.slice())
-  //SETS VALUE OF PERC TO 0
   this.props.shoppingCartStore.resetAddons();
-  // console.log(data.slice())
-  // console.log("hey",this.props.shoppingCartStore.product)
-  // this.setState({addons:data.slice()})
-  // console.log(data)
+
 }
   static navigationOptions = ()=> ({
      title:'Customize Your Wheat'
@@ -45,7 +40,9 @@ onCheckout = () =>{
     NavigationService.navigate('Addresses')
   }
   else{
-    NavigationService.navigate('checkout')
+    NavigationService.navigate('Checkout')
+    // this.props.shoppingCartStore.setAddressForOrder(this.props.authStore.info.addresses[0].id)
+    // await this.props.shoppingCartStore.sendOrder(this.props.authStore.authToken);
 
   }
 }
@@ -67,7 +64,6 @@ onCheckout = () =>{
               keyExtractor={this.keyExtractor}
               numColumns={1}
               />
-          {/* <AddonCard name={this.props.addonsStore.data.slice()[0].name} kgPrice={this.props.addonsStore.data.slice()[0].kgPrice}/> */}
         </Box>}
        {!this.state.addons && 
           <Box f={0.20}>

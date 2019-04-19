@@ -6,12 +6,12 @@ import {AsyncStorage} from 'react-native'
 
 import {inject,observer} from 'mobx-react/native'
 
-data={
-    "auth":{
-        "email":"9205266153",
-        "password":"12345678"
-    }
-}
+// data={
+//     "auth":{
+//         "email":"9205266153",
+//         "password":"12345678"
+//     }
+// }
 @inject('authStore')
 class EmailScreen extends Component {
     state = {

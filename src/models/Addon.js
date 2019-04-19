@@ -3,13 +3,13 @@ import { types } from 'mobx-state-tree';
 export const AddonModel = types.model('AddonModel',{
     id: types.identifier,
     name: types.string,
-    unityPrice: types.number,
+    rate: types.number,
     kgPrice: types.number,
     percentage: 0,
     inCart: false,
 }).views(self=>({
     get price(){
-        return (self.unityPrice*self.percentage).toFixed(2)
+        return (self.rate*self.percentage).toFixed(2)
     }
 })).actions(self => ({
     incPercentage(){
