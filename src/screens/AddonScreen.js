@@ -40,9 +40,8 @@ onCheckout = () =>{
     NavigationService.navigate('Addresses')
   }
   else{
+    this.props.shoppingCartStore.setAddressForOrder(this.props.authStore.info.addresses[0].id)
     NavigationService.navigate('Checkout')
-    // this.props.shoppingCartStore.setAddressForOrder(this.props.authStore.info.addresses[0].id)
-    // await this.props.shoppingCartStore.sendOrder(this.props.authStore.authToken);
 
   }
 }

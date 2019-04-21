@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import { Box, Text } from 'react-native-design-utility';
-import { Content, Form, Input, Item, Button, Label } from 'native-base';
+import { Content, Form, Input, Item, Button, Label,Spinner } from 'native-base';
 import {AsyncStorage} from 'react-native'
 
 
 import {inject,observer} from 'mobx-react/native'
 
-// data={
-//     "auth":{
-//         "email":"9205266153",
-//         "password":"12345678"
-//     }
-// }
+state={
+    fetching:false
+}
 @inject('authStore')
 class EmailScreen extends Component {
     state = {
@@ -29,7 +26,10 @@ class EmailScreen extends Component {
                 alert("Password should have atleast 8 characters")
                 return
             }
-            await this.props.authStore.login(email,password)
+            this.setState({fetching:true})
+            await this.props.authStore.login(email,password).then(()=>{
+                this.setState({fetching:false})
+            })
     
         }
         catch (error) {
@@ -44,7 +44,11 @@ class EmailScreen extends Component {
                 alert("Password should have atleast 8 characters")
                 return
             }
-            await this.props.authStore.signup(email,password)
+            this.setState({fetching:true})
+
+            await this.props.authStore.signup(email,password).then(()=>{
+                this.setState({fetching:false})
+            })
     
         }
         catch(error){
@@ -95,15 +99,7 @@ class EmailScreen extends Component {
 
                         />
                     </Item>
-                    {/* <Button
-                        style={{ marginTop: 10 }}
-                        block
-                        rounded
-                        light
-                        onPress={() => { this.loginUser(this.state.email, this.state.password) }}>
-                        <Text>Login</Text>
-                    </Button> */}
-            
+                 
                     <Button
                         style={{ marginTop: 10,backgroundColor: "#5CC747",color:"white" }}
                         block
@@ -115,8 +111,8 @@ class EmailScreen extends Component {
                             }
                             else this.signupUser(this.state.email,this.state.password)
                          }}>
-
-                        <Text color="white">{this.state.buttonText}</Text>
+                        {this.state.fetching? <Spinner />:<Text color="white">{this.state.buttonText}</Text>}
+                        {/* <Text color="white">{this.state.buttonText}</Text> */}
                     </Button>
    
                 </Form>

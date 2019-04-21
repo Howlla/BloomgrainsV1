@@ -56,7 +56,7 @@ class AddonCard extends Component {
                 {/* <Text right size="xs" bold >₹ {this.props.addon.price}</Text> */}
         
               
-                  <Box dir="row" justify="between" align="center"  bg="white" style={{position:'absolute',top:8,left:250}} >
+                  <Box dir="row" justify="between" align="center"  bg="white" style={{position:'absolute',top:12,left:250}} >
                   {/* <Text>{this.props.addon.price}</Text> */}
                    <TouchableOpacity onPress={this.handleDecrement}>
                      <Icon name="remove-circle" />

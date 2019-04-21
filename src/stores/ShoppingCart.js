@@ -14,6 +14,7 @@ export const ShoppingCartStore = types.model('ShoppingCartStore',{
     addons:types.optional(types.array(AddonModel),[]),
     // addons:types.maybe(types.map(AddonModel)),
     qty:types.optional(types.enumeration("qty",["1","2","5","10"]),'1'),
+    // Maybe should be 0 check karna
     selectedAddressID:types.optional(types.number,1)
 }).views(self => ({ 
     get getWheat() { // B

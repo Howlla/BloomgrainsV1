@@ -10,7 +10,6 @@ import {
   Platform
 } from 'react-native';
 import Button from './Button';
-import CountryPicker from 'react-native-country-picker-modal';
 import PropTypes from 'prop-types';
 import {observer} from 'mobx-react/native'
 
